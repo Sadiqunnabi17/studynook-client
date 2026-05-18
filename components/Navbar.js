@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 no-underline">
+    <Link href="/" className="flex items-center gap-2.5">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
         <rect width="36" height="36" rx="8" fill="#1e3a5f"/>
         <path d="M8 26V12l10-4 10 4v14" stroke="#c9a84c" strokeWidth="1.5" fill="none"/>
@@ -17,7 +17,7 @@ function Logo() {
         <path d="M10 14h16M10 18h4M22 18h4" stroke="#c9a84c" strokeWidth="1.2" opacity="0.6"/>
       </svg>
       <div>
-        <div className="text-lg font-bold leading-none font-display text-navy dark:text-cream">
+        <div className="font-display text-lg font-bold leading-none text-navy dark:text-cream">
           StudyNook
         </div>
         <div className="text-xs leading-none text-gold tracking-widest">
@@ -31,16 +31,25 @@ function Logo() {
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
-
   return (
     <button
       onClick={toggleTheme}
-      className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none ${isDark ? "bg-navy" : "bg-gray-200"}`}
       title="Toggle theme"
+      className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all
+        ${isDark
+          ? "bg-gold/10 text-gold hover:bg-gold/20"
+          : "bg-navy/8 text-navy hover:bg-navy/15"}`}
     >
-      <span className={`absolute top-0.5 w-5 h-5 rounded-full flex items-center justify-center text-xs shadow transition-all duration-300 ${isDark ? "left-[calc(100%-1.375rem)] bg-gold" : "left-0.5 bg-white"}`}>
-        {isDark ? "🌙" : "☀️"}
-      </span>
+      {isDark ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      )}
     </button>
   );
 }
@@ -77,123 +86,135 @@ export default function Navbar() {
     setDropdownOpen(false);
   };
 
+  const navLinks = [
+    { label: "Home", href: "/" },
+    { label: "Rooms", href: "/rooms" },
+    ...(user ? [
+      { label: "Add Room", href: "/add-room" },
+      { label: "My Listings", href: "/my-listings" },
+      { label: "My Bookings", href: "/my-bookings" },
+    ] : []),
+  ];
+
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl
-      ${isDark ? "bg-navy-dark/95 border-gold/10" : "bg-cream/95 border-navy/10"}
-      ${scrolled ? "shadow-md" : ""}
-      border-b`}
+    <header className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
+      ${isDark
+        ? "bg-navy-dark/95 border-gold/10"
+        : "bg-cream/95 border-navy/10"}
+      ${scrolled ? "shadow-md" : ""}`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-17 flex items-center justify-between py-4">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
 
-        {/* Logo */}
-        <Logo />
+        {/* LEFT — Logo */}
+        <div className="flex-1">
+          <Logo />
+        </div>
 
-        {/* Center Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          {["Home", "Rooms"].map((item) => (
+        {/* CENTER — Nav Links */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map(({ label, href }) => (
             <Link
-              key={item}
-              href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              className={`text-sm font-medium transition-colors duration-200 no-underline
-                ${isDark ? "text-cream/85 hover:text-gold" : "text-navy hover:text-gold"}`}
+              key={label}
+              href={href}
+              className={`text-sm font-medium transition-colors duration-200
+                ${isDark
+                  ? "text-cream/85 hover:text-gold"
+                  : "text-navy hover:text-gold"}`}
             >
-              {item}
-            </Link>
-          ))}
-          {user && ["Add Room", "My Listings", "My Bookings"].map((item) => (
-            <Link
-              key={item}
-              href={`/${item.toLowerCase().replace(/ /g, "-")}`}
-              className={`text-sm font-medium transition-colors duration-200 no-underline
-                ${isDark ? "text-cream/85 hover:text-gold" : "text-navy hover:text-gold"}`}
-            >
-              {item}
+              {label}
             </Link>
           ))}
         </nav>
 
-        {/* Right */}
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-
+        {/* RIGHT — Theme + Auth */}
+        <div className="flex-1 flex items-center justify-end gap-3">
           {user ? (
-            <div ref={dropdownRef} className="relative">
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className={`flex items-center gap-2 px-2 py-1 rounded-full transition-colors
-                  ${isDark ? "hover:bg-gold/10" : "hover:bg-navy/5"}`}
-              >
-                {user.image ? (
-                  <Image
-                    src={user.image}
-                    alt={user.name || "User"}
-                    width={34}
-                    height={34}
-                    className="rounded-full border-2 border-gold object-cover"
-                  />
-                ) : (
-                  <div className="w-9 h-9 rounded-full bg-navy border-2 border-gold flex items-center justify-center text-gold font-semibold text-sm">
-                    {user.name?.charAt(0).toUpperCase()}
+            <>
+              <ThemeToggle />
+              <div ref={dropdownRef} className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className={`flex items-center gap-2 px-2 py-1 rounded-full transition-colors
+                    ${isDark ? "hover:bg-gold/10" : "hover:bg-navy/5"}`}
+                >
+                  {user.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user.name || "User"}
+                      width={34}
+                      height={34}
+                      className="rounded-full border-2 border-gold object-cover"
+                    />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-navy border-2 border-gold flex items-center justify-center text-gold font-semibold text-sm">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className={`hidden md:block text-sm font-medium
+                    ${isDark ? "text-cream" : "text-navy"}`}>
+                    {user.name?.split(" ")[0]}
+                  </span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke={isDark ? "#f8f7f2" : "#1e3a5f"} strokeWidth="2">
+                    <path d="m6 9 6 6 6-6"/>
+                  </svg>
+                </button>
+
+                {dropdownOpen && (
+                  <div className={`absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
+                    ${isDark ? "bg-navy-dark border-gold/20" : "bg-white border-navy/10"}`}>
+                    <div className={`px-4 py-3 border-b
+                      ${isDark ? "border-white/8" : "border-gray-100"}`}>
+                      <p className={`text-sm font-semibold
+                        ${isDark ? "text-cream" : "text-navy"}`}>
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    </div>
+                    {[
+                      { label: "My Listings", href: "/my-listings" },
+                      { label: "My Bookings", href: "/my-bookings" },
+                    ].map(({ label, href }) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        onClick={() => setDropdownOpen(false)}
+                        className={`block px-4 py-2.5 text-sm transition-colors
+                          ${isDark
+                            ? "text-cream/80 hover:bg-gold/8 hover:text-gold"
+                            : "text-navy hover:bg-gray-50"}`}
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                    <button
+                      onClick={handleLogout}
+                      className={`w-full text-left px-4 py-2.5 text-sm text-red-500 
+                        transition-colors border-t hover:bg-red-50
+                        ${isDark ? "border-white/8" : "border-gray-100"}`}
+                    >
+                      Logout
+                    </button>
                   </div>
                 )}
-                <span className={`hidden md:block text-sm font-medium
-                  ${isDark ? "text-cream" : "text-navy"}`}>
-                  {user.name?.split(" ")[0]}
-                </span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                  stroke={isDark ? "#f8f7f2" : "#1e3a5f"} strokeWidth="2">
-                  <path d="m6 9 6 6 6-6"/>
-                </svg>
-              </button>
-
-              {dropdownOpen && (
-                <div className={`absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
-                  ${isDark ? "bg-navy-dark border-gold/20" : "bg-white border-navy/10"}`}>
-                  <div className={`px-4 py-3 border-b ${isDark ? "border-white/8" : "border-gray-100"}`}>
-                    <p className={`text-sm font-semibold ${isDark ? "text-cream" : "text-navy"}`}>
-                      {user.name}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                  </div>
-                  {[
-                    { label: "My Listings", href: "/my-listings" },
-                    { label: "My Bookings", href: "/my-bookings" },
-                  ].map(({ label, href }) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      onClick={() => setDropdownOpen(false)}
-                      className={`block px-4 py-2.5 text-sm no-underline transition-colors
-                        ${isDark
-                          ? "text-cream/80 hover:bg-gold/8 hover:text-gold"
-                          : "text-navy hover:bg-gray-50"}`}
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                  <button
-                    onClick={handleLogout}
-                    className={`w-full text-left px-4 py-2.5 text-sm text-red-500 transition-colors border-t
-                      hover:bg-red-50 ${isDark ? "border-white/8" : "border-gray-100"}`}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
+            </>
           ) : (
-            <div className="flex items-center gap-2">
+            <>
+              <ThemeToggle />
               <Link href="/login"
-                className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors no-underline
-                  ${isDark ? "text-cream/85 hover:text-gold" : "text-navy hover:text-gold"}`}>
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors
+                  ${isDark
+                    ? "text-cream/85 hover:text-gold"
+                    : "text-navy hover:text-gold"}`}>
                 Login
               </Link>
               <Link href="/register"
-                className="text-sm font-semibold px-4 py-2 rounded-lg transition-all no-underline
+                className="text-sm font-semibold px-4 py-2 rounded-lg transition-all
                   bg-navy text-gold border border-gold hover:bg-gold hover:text-navy">
                 Register
               </Link>
-            </div>
+            </>
           )}
         </div>
       </div>
