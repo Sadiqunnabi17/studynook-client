@@ -48,76 +48,80 @@ export default function MyBookings() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-cream dark:bg-navy-dark">
         <Navbar />
-        <main className="flex-1 bg-gray-50 py-10 px-4">
+        <main className="flex-1 py-10 px-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">My Bookings</h1>
-            <p className="text-gray-500 text-sm mb-8">Manage your study room reservations</p>
+            <h1 className="font-display text-2xl font-bold text-navy dark:text-cream mb-2">
+              My Bookings
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
+              Manage your study room reservations
+            </p>
 
-            {loading ? (
-              <Spinner />
-            ) : bookings.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
+            {loading ? <Spinner /> : bookings.length === 0 ? (
+              <div className="text-center py-20 bg-white dark:bg-navy/30 rounded-2xl
+                border border-navy/8 dark:border-gold/15">
                 <div className="text-5xl mb-4">📅</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">You have no bookings yet</h3>
-                <p className="text-gray-500 text-sm">Browse rooms and book your perfect study space</p>
+                <h3 className="text-lg font-semibold text-navy dark:text-cream mb-2">
+                  You have no bookings yet
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  Browse rooms and book your perfect study space
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
                 {bookings.map((booking) => (
-                  <div key={booking._id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                  <div key={booking._id}
+                    className="bg-white dark:bg-navy/30 rounded-2xl border
+                      border-navy/8 dark:border-gold/15 overflow-hidden shadow-sm">
                     <div className="flex flex-col md:flex-row">
-                      {/* Room Image */}
-                      <div className="relative w-full md:w-48 h-40 md:h-auto flex-shrink-0">
+                      <div className="relative w-full md:w-48 h-40 flex-shrink-0">
                         {booking.room?.image ? (
                           <Image
                             src={booking.room.image}
                             alt={booking.room.name}
                             fill
                             className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 200px"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-4xl">🏠</span>
-                          </div>
+                          <div className="w-full h-full bg-navy/10 dark:bg-gold/10
+                            flex items-center justify-center text-4xl">🏠</div>
                         )}
                       </div>
-
-                      {/* Booking Info */}
                       <div className="flex-1 p-5">
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                           <div>
-                            <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                            <h3 className="font-display font-semibold text-navy dark:text-cream text-lg mb-2">
                               {booking.room?.name || "Room Deleted"}
                             </h3>
-                            <div className="space-y-1 text-sm text-gray-500">
-                              <p>📅 {new Date(booking.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+                            <div className="space-y-1 text-sm text-gray-500 dark:text-gray-400">
+                              <p>📅 {new Date(booking.date).toLocaleDateString("en-US", {
+                                weekday: "long", year: "numeric",
+                                month: "long", day: "numeric"
+                              })}</p>
                               <p>⏰ {booking.startTime} – {booking.endTime}</p>
                               <p>📍 {booking.room?.floor}</p>
-                              <p className="text-emerald-600 font-semibold">Total: ${booking.totalCost}</p>
+                              <p className="text-gold font-semibold">Total: ${booking.totalCost}</p>
                               {booking.specialNote && (
-                                <p className="text-gray-400 italic">Note: {booking.specialNote}</p>
+                                <p className="italic text-gray-400">Note: {booking.specialNote}</p>
                               )}
                             </div>
                           </div>
-
                           <div className="flex flex-col items-end gap-3">
-                            {/* Status Badge */}
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              booking.status === "confirmed"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-red-100 text-red-700"
-                            }`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold
+                              ${booking.status === "confirmed"
+                                ? "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400"
+                                : "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400"}`}>
                               {booking.status === "confirmed" ? "✓ Confirmed" : "✗ Cancelled"}
                             </span>
-
-                            {/* Cancel Button */}
                             {booking.status === "confirmed" && isFutureDate(booking.date) && (
                               <button
                                 onClick={() => setCancelModal(booking)}
-                                className="text-sm text-red-500 border border-red-300 px-3 py-1.5 rounded-lg hover:bg-red-50 transition"
-                              >
+                                className="text-sm text-red-500 border border-red-300 px-3 py-1.5
+                                  rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition">
                                 Cancel Booking
                               </button>
                             )}
@@ -132,13 +136,14 @@ export default function MyBookings() {
           </div>
         </main>
 
-        {/* Cancel Modal */}
         {cancelModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-            <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Cancel Booking</h3>
-              <p className="text-gray-500 text-sm mb-2">
-                Are you sure you want to cancel your booking for <strong>{cancelModal.room?.name}</strong>?
+            <div className="bg-white dark:bg-navy-dark rounded-2xl p-6 max-w-sm w-full
+              border border-navy/10 dark:border-gold/20">
+              <h3 className="text-lg font-bold text-navy dark:text-cream mb-2">Cancel Booking</h3>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">
+                Are you sure you want to cancel your booking for{" "}
+                <strong>{cancelModal.room?.name}</strong>?
               </p>
               <p className="text-gray-400 text-xs mb-6">
                 📅 {new Date(cancelModal.date).toLocaleDateString()} · ⏰ {cancelModal.startTime} – {cancelModal.endTime}
@@ -146,21 +151,20 @@ export default function MyBookings() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setCancelModal(null)}
-                  className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl font-medium hover:bg-gray-50 transition"
-                >
+                  className="flex-1 border border-navy/20 dark:border-gold/20 text-navy dark:text-cream
+                    py-2.5 rounded-xl font-medium hover:bg-navy/5 dark:hover:bg-gold/5 transition">
                   Keep Booking
                 </button>
                 <button
                   onClick={() => handleCancel(cancelModal._id)}
-                  className="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-medium hover:bg-red-600 transition"
-                >
+                  className="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-medium
+                    hover:bg-red-600 transition">
                   Yes, Cancel
                 </button>
               </div>
             </div>
           </div>
         )}
-
         <Footer />
       </div>
     </ProtectedRoute>

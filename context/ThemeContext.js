@@ -9,14 +9,22 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const saved = localStorage.getItem("studynook-theme") || "light";
     setTheme(saved);
-    document.documentElement.classList.toggle("dark", saved === "dark");
+    if (saved === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   const toggleTheme = () => {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     localStorage.setItem("studynook-theme", next);
-    document.documentElement.classList.toggle("dark", next === "dark");
+    if (next === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   return (

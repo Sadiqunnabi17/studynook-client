@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
+    <Link href="/" className="flex items-center gap-2.5 no-underline">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
         <rect width="36" height="36" rx="8" fill="#1e3a5f"/>
         <path d="M8 26V12l10-4 10 4v14" stroke="#c9a84c" strokeWidth="1.5" fill="none"/>
@@ -20,7 +20,7 @@ function Logo() {
         <div className="font-display text-lg font-bold leading-none text-navy dark:text-cream">
           StudyNook
         </div>
-        <div className="text-xs leading-none text-gold tracking-widest">
+        <div className="text-xs leading-none text-gold tracking-widest mt-0.5">
           UNIVERSITY LIBRARY
         </div>
       </div>
@@ -35,10 +35,9 @@ function ThemeToggle() {
     <button
       onClick={toggleTheme}
       title="Toggle theme"
-      className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all
-        ${isDark
-          ? "bg-gold/10 text-gold hover:bg-gold/20"
-          : "bg-navy/8 text-navy hover:bg-navy/15"}`}
+      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all
+        bg-navy/8 dark:bg-gold/10 text-navy dark:text-gold
+        hover:bg-navy/15 dark:hover:bg-gold/20"
     >
       {isDark ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -56,12 +55,10 @@ function ThemeToggle() {
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const { theme } = useTheme();
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
-  const isDark = theme === "dark";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -98,12 +95,11 @@ export default function Navbar() {
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
-      ${isDark
-        ? "bg-navy-dark/95 border-gold/10"
-        : "bg-cream/95 border-navy/10"}
+      bg-cream/95 dark:bg-navy-dark/95
+      border-navy/10 dark:border-gold/10
       ${scrolled ? "shadow-md" : ""}`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
         {/* LEFT — Logo */}
         <div className="flex-1">
@@ -111,31 +107,29 @@ export default function Navbar() {
         </div>
 
         {/* CENTER — Nav Links */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map(({ label, href }) => (
             <Link
               key={label}
               href={href}
-              className={`text-sm font-medium transition-colors duration-200
-                ${isDark
-                  ? "text-cream/85 hover:text-gold"
-                  : "text-navy hover:text-gold"}`}
+              className="text-sm font-medium transition-colors duration-200
+                text-navy dark:text-cream/85
+                hover:text-gold dark:hover:text-gold"
             >
               {label}
             </Link>
           ))}
         </nav>
 
-        {/* RIGHT — Theme + Auth */}
+        {/* RIGHT — Auth + Theme */}
         <div className="flex-1 flex items-center justify-end gap-3">
           {user ? (
             <>
-              <ThemeToggle />
               <div ref={dropdownRef} className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`flex items-center gap-2 px-2 py-1 rounded-full transition-colors
-                    ${isDark ? "hover:bg-gold/10" : "hover:bg-navy/5"}`}
+                  className="flex items-center gap-2 px-2 py-1 rounded-full transition-colors
+                    hover:bg-navy/5 dark:hover:bg-gold/10"
                 >
                   {user.image ? (
                     <Image
@@ -146,29 +140,27 @@ export default function Navbar() {
                       className="rounded-full border-2 border-gold object-cover"
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-navy border-2 border-gold flex items-center justify-center text-gold font-semibold text-sm">
+                    <div className="w-9 h-9 rounded-full bg-navy border-2 border-gold
+                      flex items-center justify-center text-gold font-semibold text-sm">
                       {user.name?.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className={`hidden md:block text-sm font-medium
-                    ${isDark ? "text-cream" : "text-navy"}`}>
+                  <span className="hidden md:block text-sm font-medium text-navy dark:text-cream">
                     {user.name?.split(" ")[0]}
                   </span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                    stroke={isDark ? "#f8f7f2" : "#1e3a5f"} strokeWidth="2">
+                    stroke="currentColor" strokeWidth="2"
+                    className="text-navy dark:text-cream">
                     <path d="m6 9 6 6 6-6"/>
                   </svg>
                 </button>
 
                 {dropdownOpen && (
-                  <div className={`absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
-                    ${isDark ? "bg-navy-dark border-gold/20" : "bg-white border-navy/10"}`}>
-                    <div className={`px-4 py-3 border-b
-                      ${isDark ? "border-white/8" : "border-gray-100"}`}>
-                      <p className={`text-sm font-semibold
-                        ${isDark ? "text-cream" : "text-navy"}`}>
-                        {user.name}
-                      </p>
+                  <div className="absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
+                    bg-white dark:bg-navy-dark
+                    border-navy/10 dark:border-gold/20">
+                    <div className="px-4 py-3 border-b border-gray-100 dark:border-white/8">
+                      <p className="text-sm font-semibold text-navy dark:text-cream">{user.name}</p>
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     {[
@@ -179,41 +171,42 @@ export default function Navbar() {
                         key={label}
                         href={href}
                         onClick={() => setDropdownOpen(false)}
-                        className={`block px-4 py-2.5 text-sm transition-colors
-                          ${isDark
-                            ? "text-cream/80 hover:bg-gold/8 hover:text-gold"
-                            : "text-navy hover:bg-gray-50"}`}
+                        className="block px-4 py-2.5 text-sm transition-colors
+                          text-navy dark:text-cream/80
+                          hover:bg-gray-50 dark:hover:bg-gold/8 dark:hover:text-gold"
                       >
                         {label}
                       </Link>
                     ))}
                     <button
                       onClick={handleLogout}
-                      className={`w-full text-left px-4 py-2.5 text-sm text-red-500 
-                        transition-colors border-t hover:bg-red-50
-                        ${isDark ? "border-white/8" : "border-gray-100"}`}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-500
+                        transition-colors border-t
+                        border-gray-100 dark:border-white/8
+                        hover:bg-red-50 dark:hover:bg-red-500/10"
                     >
                       Logout
                     </button>
                   </div>
                 )}
               </div>
+              <ThemeToggle />
             </>
           ) : (
             <>
-              <ThemeToggle />
               <Link href="/login"
-                className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors
-                  ${isDark
-                    ? "text-cream/85 hover:text-gold"
-                    : "text-navy hover:text-gold"}`}>
+                className="text-sm font-medium px-4 py-2 rounded-lg transition-colors
+                  text-navy dark:text-cream/85
+                  hover:text-gold dark:hover:text-gold">
                 Login
               </Link>
               <Link href="/register"
                 className="text-sm font-semibold px-4 py-2 rounded-lg transition-all
-                  bg-navy text-gold border border-gold hover:bg-gold hover:text-navy">
+                  bg-navy text-gold border border-gold
+                  hover:bg-gold hover:text-navy">
                 Register
               </Link>
+              <ThemeToggle />
             </>
           )}
         </div>

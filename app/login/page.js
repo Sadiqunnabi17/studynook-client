@@ -40,7 +40,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-cream dark:bg-navy-dark">
       <Navbar />
       <main className="flex-1 flex items-center justify-center bg-gray-50 px-4 py-12">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 w-full max-w-md">
