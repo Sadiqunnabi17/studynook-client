@@ -1,28 +1,43 @@
 "use client";
-import { createContext, useContext } from "react";
-import { useSession, signOut } from "next-auth/react";
 
-const AuthContext = createContext({
-  user: null,
-  loading: true,
-  logout: () => {},
-});
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "@/api/axios";
+import { useRouter } from "next/navigation";
+
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const { data: session, status } = useSession();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const res = await api.get("/users/me");
+        setUser(res.data.data);
+      } catch (err) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
 
   const logout = async () => {
-    await signOut({ callbackUrl: "/" });
+    try {
+      await api.post("/users/logout");
+      setUser(null);
+      router.push("/login");
+    } catch (err) {
+      console.error("Logout failed:", err.message);
+    }
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user: session?.user || null,
-        loading: status === "loading",
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, setUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

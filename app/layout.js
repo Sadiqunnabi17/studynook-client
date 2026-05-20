@@ -1,4 +1,4 @@
-import { SessionProvider } from "./SessionProvider";
+
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "react-hot-toast";
@@ -13,14 +13,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          <ThemeProvider>
-            <AuthProvider>
-              <Toaster position="top-right" />
-              {children}
-            </AuthProvider>
-          </ThemeProvider>
-        </SessionProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <Toaster position="top-right" />
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

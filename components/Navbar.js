@@ -131,7 +131,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 px-2 py-1 rounded-full transition-colors
                     hover:bg-navy/5 dark:hover:bg-gold/10"
                 >
-                  {user.image ? (
+                  {user.image && user.image.startsWith("http") ? (
                     <Image
                       src={user.image}
                       alt={user.name || "User"}

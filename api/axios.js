@@ -1,11 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  // baseURL: "http://localhost:5000/api",
+  baseURL: "/api", // ← no localhost:5000, uses Next.js proxy
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 export default api;
