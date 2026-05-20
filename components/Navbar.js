@@ -57,8 +57,10 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -71,6 +73,9 @@ export default function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -81,16 +86,26 @@ export default function Navbar() {
     toast.success("Logged out successfully");
     router.push("/");
     setDropdownOpen(false);
+    setMenuOpen(false);
   };
 
-  const navLinks = [
+  // Only Home and Rooms show in center nav (always visible on md+)
+  const centerLinks = [
     { label: "Home", href: "/" },
     { label: "Rooms", href: "/rooms" },
+  ];
+
+  // These go under hamburger on small screens
+  const hamburgerLinks = [
     ...(user ? [
       { label: "Add Room", href: "/add-room" },
       { label: "My Listings", href: "/my-listings" },
       { label: "My Bookings", href: "/my-bookings" },
-    ] : []),
+      { label: "My Profile", href: "/profile" },
+    ] : [
+      { label: "Login", href: "/login" },
+      { label: "Register", href: "/register" },
+    ]),
   ];
 
   return (
@@ -106,9 +121,9 @@ export default function Navbar() {
           <Logo />
         </div>
 
-        {/* CENTER — Nav Links */}
+        {/* CENTER — Home & Rooms always visible on md+ */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map(({ label, href }) => (
+          {centerLinks.map(({ label, href }) => (
             <Link
               key={label}
               href={href}
@@ -119,13 +134,43 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
+          {/* Extra links on md+ when logged in */}
+          {user && (
+            <>
+              <Link href="/add-room"
+                className="text-sm font-medium transition-colors duration-200
+                  text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold">
+                Add Room
+              </Link>
+              <Link href="/my-listings"
+                className="text-sm font-medium transition-colors duration-200
+                  text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold">
+                My Listings
+              </Link>
+            </>
+          )}
         </nav>
 
-        {/* RIGHT — Auth + Theme */}
+        {/* RIGHT — Auth + Theme + Hamburger */}
         <div className="flex-1 flex items-center justify-end gap-3">
+
+          {/* Home & Rooms visible on small screens too */}
+          <div className="flex md:hidden items-center gap-4">
+            {centerLinks.map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
+                className="text-sm font-medium text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold transition-colors"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
           {user ? (
             <>
-              <div ref={dropdownRef} className="relative">
+              {/* User dropdown — hidden on small, visible md+ */}
+              <div ref={dropdownRef} className="relative hidden md:block">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 px-2 py-1 rounded-full transition-colors
@@ -164,6 +209,7 @@ export default function Navbar() {
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     {[
+                      { label: "My Profile", href: "/profile" },
                       { label: "My Listings", href: "/my-listings" },
                       { label: "My Bookings", href: "/my-bookings" },
                     ].map(({ label, href }) => (
@@ -195,13 +241,13 @@ export default function Navbar() {
           ) : (
             <>
               <Link href="/login"
-                className="text-sm font-medium px-4 py-2 rounded-lg transition-colors
+                className="hidden md:block text-sm font-medium px-4 py-2 rounded-lg transition-colors
                   text-navy dark:text-cream/85
                   hover:text-gold dark:hover:text-gold">
                 Login
               </Link>
               <Link href="/register"
-                className="text-sm font-semibold px-4 py-2 rounded-lg transition-all
+                className="hidden md:block text-sm font-semibold px-4 py-2 rounded-lg transition-all
                   bg-navy text-gold border border-gold
                   hover:bg-gold hover:text-navy">
                 Register
@@ -209,6 +255,80 @@ export default function Navbar() {
               <ThemeToggle />
             </>
           )}
+
+          {/* Hamburger — small screens only */}
+          <div ref={menuRef} className="relative md:hidden">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="w-9 h-9 rounded-lg flex items-center justify-center
+                bg-navy/8 dark:bg-gold/10 text-navy dark:text-gold
+                hover:bg-navy/15 dark:hover:bg-gold/20 transition-all"
+            >
+              {menuOpen ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              )}
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
+                bg-white dark:bg-navy-dark border-navy/10 dark:border-gold/20">
+                {user && (
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-white/8 flex items-center gap-3">
+                    {user.image && user.image.startsWith("http") ? (
+                      <Image
+                        src={user.image}
+                        alt={user.name || "User"}
+                        width={32}
+                        height={32}
+                        className="rounded-full border-2 border-gold object-cover"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-navy border-2 border-gold
+                        flex items-center justify-center text-gold font-semibold text-xs">
+                        {user.name?.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-navy dark:text-cream">{user.name}</p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    </div>
+                  </div>
+                )}
+                {hamburgerLinks.map(({ label, href }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-4 py-2.5 text-sm transition-colors
+                      text-navy dark:text-cream/80
+                      hover:bg-gray-50 dark:hover:bg-gold/8 dark:hover:text-gold"
+                  >
+                    {label}
+                  </Link>
+                ))}
+                {user && (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2.5 text-sm text-red-500
+                      transition-colors border-t border-gray-100 dark:border-white/8
+                      hover:bg-red-50 dark:hover:bg-red-500/10"
+                  >
+                    Logout
+                  </button>
+                )}
+                <div className="px-4 py-3 border-t border-gray-100 dark:border-white/8">
+                  <ThemeToggle />
+                </div>
+              </div>
+            )}
+          </div>
+
         </div>
       </div>
     </header>

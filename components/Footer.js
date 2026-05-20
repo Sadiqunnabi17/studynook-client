@@ -64,6 +64,7 @@ export default function Footer() {
                 { label: "All Rooms", href: "/rooms" },
                 { label: "Add Room", href: "/add-room" },
                 { label: "My Bookings", href: "/my-bookings" },
+                { label: "My Profile", href: "/profile" }, // ← added
               ].map(({ label, href }) => (
                 <Link key={label} href={href}
                   className="block text-sm text-white/50 hover:text-gold transition-colors">
