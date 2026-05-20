@@ -1,6 +1,5 @@
 "use client";
 import { useForm } from "react-hook-form";
-
 import { useRouter } from "next/navigation";
 import api from "@/api/axios";
 import toast from "react-hot-toast";
@@ -8,6 +7,35 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useEffect } from "react";
+
+const DEPARTMENTS = [
+  "Computer Science & Engineering",
+  "Electrical & Electronic Engineering",
+  "Business Administration",
+  "Economics",
+  "English",
+  "Law",
+  "Pharmacy",
+  "Civil Engineering",
+  "Architecture",
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Other",
+];
+
+const ACADEMIC_LEVELS = [
+  "1st Year 1st Semester",
+  "1st Year 2nd Semester",
+  "2nd Year 1st Semester",
+  "2nd Year 2nd Semester",
+  "3rd Year 1st Semester",
+  "3rd Year 2nd Semester",
+  "4th Year 1st Semester",
+  "4th Year 2nd Semester",
+  "Masters",
+  "PhD",
+];
 
 export default function Register() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -29,8 +57,8 @@ export default function Register() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    await signIn("google", { callbackUrl: "/" });
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/users/auth/google";
   };
 
   return (
@@ -38,6 +66,7 @@ export default function Register() {
       <Navbar />
       <main className="flex-1 flex items-center justify-center bg-gray-50 px-4 py-12">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 w-full max-w-md">
+
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -68,6 +97,8 @@ export default function Register() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
               <input
@@ -79,6 +110,62 @@ export default function Register() {
               {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
             </div>
 
+            {/* Student ID */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
+              <input
+                type="text"
+                {...register("studentId", { required: "Student ID is required" })}
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                placeholder="e.g. 2021-1-60-001"
+              />
+              {errors.studentId && <p className="text-red-500 text-xs mt-1">{errors.studentId.message}</p>}
+            </div>
+
+            {/* Department */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+              <select
+                {...register("department", { required: "Department is required" })}
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition bg-white"
+              >
+                <option value="">-- Select Department --</option>
+                {DEPARTMENTS.map((dept) => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
+              </select>
+              {errors.department && <p className="text-red-500 text-xs mt-1">{errors.department.message}</p>}
+            </div>
+
+            {/* Academic Level */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Academic Level</label>
+              <select
+                {...register("academicLevel", { required: "Academic level is required" })}
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition bg-white"
+              >
+                <option value="">-- Select Academic Level --</option>
+                {ACADEMIC_LEVELS.map((level) => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+              {errors.academicLevel && <p className="text-red-500 text-xs mt-1">{errors.academicLevel.message}</p>}
+            </div>
+
+            {/* Photo URL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Photo URL <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <input
+                type="text"
+                {...register("image")}
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                placeholder="https://example.com/photo.jpg"
+              />
+            </div>
+
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
@@ -90,17 +177,7 @@ export default function Register() {
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
-              <input
-                type="text"
-                {...register("image", { required: "Photo URL is required" })}
-                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
-                placeholder="https://example.com/photo.jpg"
-              />
-              {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image.message}</p>}
-            </div>
-
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <input
@@ -111,7 +188,7 @@ export default function Register() {
                   validate: {
                     hasUppercase: (v) => /[A-Z]/.test(v) || "Must have at least one uppercase letter",
                     hasLowercase: (v) => /[a-z]/.test(v) || "Must have at least one lowercase letter",
-                  }
+                  },
                 })}
                 className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
                 placeholder="••••••••"
