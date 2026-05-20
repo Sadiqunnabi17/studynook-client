@@ -3,12 +3,58 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { useTheme } from "@/context/ThemeContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import api from "@/api/axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import Link from "next/link";
+
+function Logo() {
+  return (
+    <Link href="/" className="flex items-center gap-2.5 no-underline">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <rect width="36" height="36" rx="8" fill="#1e3a5f"/>
+        <path d="M8 26V12l10-4 10 4v14" stroke="#c9a84c" strokeWidth="1.5" fill="none"/>
+        <rect x="14" y="18" width="8" height="8" rx="1" fill="#c9a84c" opacity="0.9"/>
+        <path d="M10 14h16M10 18h4M22 18h4" stroke="#c9a84c" strokeWidth="1.2" opacity="0.6"/>
+      </svg>
+      <div>
+        <div className="font-display text-lg font-bold leading-none text-navy dark:text-cream">
+          StudyNook
+        </div>
+        <div className="text-xs leading-none text-gold tracking-widest mt-0.5">
+          UNIVERSITY LIBRARY
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <button
+      onClick={toggleTheme}
+      title="Toggle theme"
+      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all
+        bg-navy/8 dark:bg-gold/10 text-navy dark:text-gold
+        hover:bg-navy/15 dark:hover:bg-gold/20"
+    >
+      {isDark ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      )}
+    </button>
+  );
+}
 
 export default function Profile() {
   const { user, setUser } = useAuth();
@@ -50,9 +96,15 @@ export default function Profile() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen flex flex-col bg-cream dark:bg-navy-dark">
-        <Navbar />
-        <main className="flex-1 py-10 px-6">
+      <div className="min-h-screen flex flex-col bg-cream dark:bg-navy-dark transition-colors duration-300">
+
+        {/* Top bar with logo and theme toggle */}
+        <div className="max-w-2xl mx-auto w-full px-6 pt-6 flex items-center justify-between">
+          <Logo />
+          <ThemeToggle />
+        </div>
+
+        <main className="flex-1 py-8 px-6">
           <div className="max-w-2xl mx-auto">
             <h1 className="font-display text-2xl font-bold text-navy dark:text-cream mb-1">
               My Profile
@@ -90,7 +142,6 @@ export default function Profile() {
 
               {/* Student Info */}
               <div className="grid grid-cols-1 gap-4 mb-8">
-
                 <div className="bg-cream dark:bg-navy-dark rounded-xl p-4">
                   <p className="text-xs text-gray-400 mb-1">Student ID</p>
                   <p className="text-sm font-medium text-navy dark:text-cream">
@@ -124,7 +175,6 @@ export default function Profile() {
                       : "—"}
                   </p>
                 </div>
-
               </div>
 
               {/* Edit Section */}
@@ -132,7 +182,7 @@ export default function Profile() {
                 <button
                   onClick={() => setIsEditing(true)}
                   className="w-full border border-gold text-navy dark:text-gold py-3 rounded-xl
-                    font-semibold hover:bg-gold hover:text-navy transition"
+                    font-semibold hover:bg-gold hover:text-navy dark:hover:text-navy transition"
                 >
                   Edit Profile
                 </button>
@@ -193,26 +243,39 @@ export default function Profile() {
                     <button
                       type="button"
                       onClick={() => setIsEditing(false)}
-                      className="flex-1 border border-gray-300 text-gray-600 py-3 rounded-xl
-                        font-semibold hover:bg-gray-50 transition"
+                      className="flex-1 border border-gray-300 dark:border-white/20
+                        text-gray-600 dark:text-gray-400 py-3 rounded-xl
+                        font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="flex-1 bg-navy text-gold border border-gold py-3 rounded-xl
-                        font-semibold hover:bg-gold hover:text-navy transition disabled:opacity-50"
+                      className="flex-1 bg-navy dark:bg-gold text-gold dark:text-navy border border-gold
+                        py-3 rounded-xl font-semibold hover:bg-gold hover:text-navy
+                        dark:hover:bg-navy dark:hover:text-gold transition disabled:opacity-50
+                        flex items-center justify-center gap-2"
                     >
-                      {isSubmitting ? "Saving..." : "Save Changes"}
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          Saving...
+                        </>
+                      ) : "Save Changes"}
                     </button>
                   </div>
                 </form>
               )}
             </div>
+
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+              <Link href="/" className="text-gold font-medium hover:underline">
+                ← Back to Home
+              </Link>
+            </p>
           </div>
         </main>
-        <Footer />
       </div>
     </ProtectedRoute>
   );
