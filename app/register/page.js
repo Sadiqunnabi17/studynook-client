@@ -34,7 +34,7 @@ const ACADEMIC_LEVELS = [
   "4th Year 1st Semester",
   "4th Year 2nd Semester",
   "Masters",
-  "PhD",
+  "MPhil/PhD",
 ];
 
 export default function Register() {
@@ -156,11 +156,11 @@ export default function Register() {
 
             <div>
               <label className={labelClass}>
-                Photo URL <span className="text-gray-400 font-normal">(optional)</span>
+                Photo URL <span className="text-gray-400 font-normal"></span>
               </label>
               <input
                 type="text"
-                {...register("image")}
+                {...register("image", { required: "Photo URL is required" })}
                 className={inputClass}
                 placeholder="https://example.com/photo.jpg"
               />

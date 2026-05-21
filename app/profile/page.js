@@ -14,10 +14,10 @@ function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5 no-underline">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <rect width="36" height="36" rx="8" fill="#1e3a5f"/>
-        <path d="M8 26V12l10-4 10 4v14" stroke="#c9a84c" strokeWidth="1.5" fill="none"/>
-        <rect x="14" y="18" width="8" height="8" rx="1" fill="#c9a84c" opacity="0.9"/>
-        <path d="M10 14h16M10 18h4M22 18h4" stroke="#c9a84c" strokeWidth="1.2" opacity="0.6"/>
+        <rect width="36" height="36" rx="8" fill="#1e3a5f" />
+        <path d="M8 26V12l10-4 10 4v14" stroke="#c9a84c" strokeWidth="1.5" fill="none" />
+        <rect x="14" y="18" width="8" height="8" rx="1" fill="#c9a84c" opacity="0.9" />
+        <path d="M10 14h16M10 18h4M22 18h4" stroke="#c9a84c" strokeWidth="1.2" opacity="0.6" />
       </svg>
       <div>
         <div className="font-display text-lg font-bold leading-none text-navy dark:text-cream">
@@ -44,12 +44,12 @@ function ThemeToggle() {
     >
       {isDark ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="5"/>
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          <circle cx="12" cy="12" r="5" />
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
         </svg>
       ) : (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
     </button>
@@ -110,7 +110,7 @@ export default function Profile() {
               My Profile
             </h1>
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-              View and update your student information
+              View and update your student information. Keep your academic level up to date for a personalised experience.
             </p>
 
             <div className="bg-white dark:bg-navy/30 rounded-2xl border border-navy/8 dark:border-gold/15 p-6 shadow-sm">
@@ -168,10 +168,10 @@ export default function Profile() {
                   <p className="text-sm font-medium text-navy dark:text-cream">
                     {user?.createdAt
                       ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
                       : "—"}
                   </p>
                 </div>

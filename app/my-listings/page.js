@@ -33,8 +33,8 @@ export default function MyListings() {
     document.title = "StudyNook – My Listings";
     fetchWishlist();
   }, []);
-  
-  
+
+
   const handleRemove = async (roomId) => {
     try {
       await api.patch(`/users/wishlist/${roomId}`);
@@ -83,7 +83,7 @@ export default function MyListings() {
                   No saved rooms yet
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-                  Browse rooms and save your favourites here
+                  Save your favourite study rooms here for quick access and one-click booking anytime.
                 </p>
                 <Link href="/rooms"
                   className="bg-navy text-gold border border-gold px-6 py-2.5 rounded-xl
