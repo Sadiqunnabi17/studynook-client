@@ -2,11 +2,20 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+
+  "eslintConfig": {
+    "extends": "next/core-web-vitals",
+    "rules": {
+      "react-hooks/immutability": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/incompatible-library": "off"
+    }
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.2",
