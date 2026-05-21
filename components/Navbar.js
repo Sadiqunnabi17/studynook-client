@@ -97,6 +97,7 @@ export default function Navbar() {
 
   // Hamburger links for small screens
   const hamburgerLinks = user ? [
+    { label: "Add Room", href: "/add-room" },
     { label: "My Listings", href: "/my-listings" },
     { label: "My Bookings", href: "/my-bookings" },
     { label: "My Profile", href: "/profile" },
@@ -191,6 +192,7 @@ export default function Navbar() {
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     {[
+                      { label: "Add Room", href: "/add-room" },
                       { label: "My Listings", href: "/my-listings" },
                       { label: "My Bookings", href: "/my-bookings" },
                       { label: "My Profile", href: "/profile" },
