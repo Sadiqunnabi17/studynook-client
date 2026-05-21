@@ -15,10 +15,7 @@ function RoomCard({ room }) {
   return (
     <div className={`rounded-2xl overflow-hidden border transition-all duration-300 flex flex-col
       hover:-translate-y-1 hover:shadow-xl hover:border-gold
-      ${isDark
-        ? "bg-navy/30 border-gold/15"
-        : "bg-white border-navy/8 shadow-sm"}`}
-    >
+      ${isDark ? "bg-navy/30 border-gold/15" : "bg-white border-navy/8 shadow-sm"}`}>
       <div className="relative h-48 w-full">
         <Image
           src={room.image}
@@ -32,10 +29,8 @@ function RoomCard({ room }) {
           ${room.hourlyRate}/hr
         </div>
       </div>
-
       <div className="p-5 flex flex-col flex-1">
-        <h3 className={`font-display text-lg font-bold mb-2
-          ${isDark ? "text-cream" : "text-navy"}`}>
+        <h3 className={`font-display text-lg font-bold mb-2 ${isDark ? "text-cream" : "text-navy"}`}>
           {room.name}
         </h3>
         <p className="text-gray-500 text-sm mb-3 leading-relaxed line-clamp-2">
@@ -48,9 +43,7 @@ function RoomCard({ room }) {
         <div className="flex flex-wrap gap-1.5 mb-4">
           {room.amenities.slice(0, 3).map((a) => (
             <span key={a} className={`text-xs px-2.5 py-1 rounded-full border
-              ${isDark
-                ? "bg-gold/10 text-gold border-gold/20"
-                : "bg-navy/5 text-navy border-navy/12"}`}>
+              ${isDark ? "bg-gold/10 text-gold border-gold/20" : "bg-navy/5 text-navy border-navy/12"}`}>
               {a}
             </span>
           ))}
@@ -93,7 +86,6 @@ export default function Home() {
 
       {/* HERO */}
       <section className="bg-gradient-to-br from-navy-dark via-navy to-navy-light py-20 px-6 relative overflow-hidden">
-        {/* Background pattern */}
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: "repeating-linear-gradient(45deg, #c9a84c 0, #c9a84c 1px, transparent 0, transparent 50%)", backgroundSize: "20px 20px" }}
         />
@@ -117,36 +109,37 @@ export default function Home() {
               Access dedicated study rooms, collaborative spaces, and private reading areas across our university library — designed for students and faculty alike.
             </p>
 
-            <div className="flex gap-3 flex-wrap">
+            {/* CTA buttons — visible on all screens */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/rooms"
-                className="inline-flex items-center gap-2 bg-gold text-navy font-bold px-7 py-3 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
+                className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-7 py-3 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
                 Explore Rooms
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </Link>
               <Link href="/register"
-                className="inline-flex items-center gap-2 text-white border border-white/30 font-medium px-7 py-3 rounded-xl no-underline transition-all hover:border-white/70 hover:bg-white/8">
+                className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-7 py-3 rounded-xl no-underline transition-all hover:border-white/70 hover:bg-white/8">
                 Get Started Free
               </Link>
             </div>
 
-            {/* Stats */}
+            {/* Stats — updated to match actual app */}
             <div className="flex gap-8 mt-10 pt-8 border-t border-white/10">
               {[
-                { num: "50+", label: "Study Rooms" },
-                { num: "1,200+", label: "Students" },
-                { num: "4.9★", label: "Rating" },
+                { num: "20", label: "Study Rooms" },
+                { num: "8AM–10PM", label: "Open Hours" },
+                { num: "instant", label: "Booking" },
               ].map(({ num, label }) => (
                 <div key={label}>
-                  <div className="font-display text-2xl font-bold text-gold">{num}</div>
+                  <div className="font-display text-xl font-bold text-gold">{num}</div>
                   <div className="text-xs text-white/50 mt-1">{label}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right - Library Image */}
+          {/* Right - Library Image — only on lg */}
           <div className="relative hidden lg:block">
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold/20 aspect-[4/3] relative">
               <Image
@@ -163,7 +156,7 @@ export default function Home() {
             <div className={`absolute -bottom-5 -left-5 rounded-2xl px-4 py-3 shadow-xl border
               ${isDark ? "bg-navy-dark/95 border-gold/20" : "bg-white/95 border-navy/10"}`}>
               <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Available Today</div>
-              <div className={`font-display text-2xl font-bold ${isDark ? "text-cream" : "text-navy"}`}>12 Rooms</div>
+              <div className={`font-display text-2xl font-bold ${isDark ? "text-cream" : "text-navy"}`}>20 Rooms</div>
               <div className="text-xs text-gold font-medium">Ready to book</div>
             </div>
 
@@ -209,6 +202,7 @@ export default function Home() {
             </div>
           )}
 
+          {/* View all — visible on small screens */}
           <div className="text-center mt-10 md:hidden">
             <Link href="/rooms"
               className="inline-flex items-center gap-2 text-gold border border-gold px-6 py-2.5 rounded-lg text-sm font-semibold no-underline hover:bg-gold hover:text-navy transition-all">
@@ -286,15 +280,22 @@ export default function Home() {
             <em className="text-gold italic">Perfect Study Spot?</em>
           </h2>
           <p className="text-white/65 text-base leading-relaxed mb-8">
-            Join thousands of students and faculty who have already discovered the convenience of StudyNook.
+            Join students and faculty who have already discovered the convenience of StudyNook — your university library booking system.
           </p>
-          <Link href="/rooms"
-            className="inline-flex items-center gap-2 bg-gold text-navy font-bold px-8 py-3.5 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
-            Browse All Rooms
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </Link>
+          {/* CTA buttons — both visible on all screens */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/rooms"
+              className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-8 py-3.5 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
+              Browse All Rooms
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </Link>
+            <Link href="/register"
+              className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-8 py-3.5 rounded-xl no-underline transition-all hover:border-gold hover:text-gold">
+              Create Free Account
+            </Link>
+          </div>
         </div>
       </section>
 
