@@ -6,10 +6,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Spinner from "@/components/Spinner";
 import api from "@/api/axios";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const AMENITIES = ["Whiteboard", "Projector", "Wi-Fi", "Power Outlets", "Quiet Zone", "Air Conditioning"];
 
-function RoomCard({ room }) {
+function RoomCard({ room, wishlist, onToggleWishlist }) {
+  const { user } = useAuth();
+  const isWishlisted = wishlist.includes(room._id);
+
   return (
     <div className="bg-white dark:bg-navy/30 rounded-2xl border border-navy/8 dark:border-gold/15
       overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-gold
@@ -26,6 +31,23 @@ function RoomCard({ room }) {
         <div className="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">
           ${room.hourlyRate}/hr
         </div>
+        {/* Wishlist button */}
+        {user && (
+          <button
+            onClick={() => onToggleWishlist(room._id)}
+            className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center
+              transition-all backdrop-blur-sm
+              bg-white/20 hover:bg-white/40"
+            title={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24"
+              fill={isWishlisted ? "#c9a84c" : "none"}
+              stroke={isWishlisted ? "#c9a84c" : "white"}
+              strokeWidth="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+        )}
       </div>
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-display text-lg font-bold mb-2 text-navy dark:text-cream">
@@ -52,12 +74,12 @@ function RoomCard({ room }) {
             </span>
           )}
         </div>
-        <div className="mt-auto">
+        <div className="mt-auto flex gap-2">
           <Link href={`/rooms/${room._id}`}
-            className="block w-full text-center bg-navy dark:bg-navy text-gold border border-gold
+            className="flex-1 text-center bg-navy dark:bg-navy text-gold border border-gold
               py-2 rounded-lg text-sm font-semibold
               hover:bg-gold hover:text-navy transition-all duration-200">
-            View Details
+            View & Book
           </Link>
         </div>
       </div>
@@ -66,7 +88,9 @@ function RoomCard({ room }) {
 }
 
 export default function Rooms() {
+  const { user } = useAuth();
   const [rooms, setRooms] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedAmenities, setSelectedAmenities] = useState([]);
@@ -78,6 +102,10 @@ export default function Rooms() {
   useEffect(() => {
     fetchRooms();
   }, [search, selectedAmenities]);
+
+  useEffect(() => {
+    if (user) fetchWishlist();
+  }, [user]);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -91,6 +119,28 @@ export default function Rooms() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchWishlist = async () => {
+    try {
+      const res = await api.get("/users/wishlist");
+      setWishlist(res.data.data.map((r) => r._id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleToggleWishlist = async (roomId) => {
+    try {
+      const res = await api.patch(`/users/wishlist/${roomId}`);
+      const isWishlisted = res.data.data.wishlisted;
+      setWishlist((prev) =>
+        isWishlisted ? [...prev, roomId] : prev.filter((id) => id !== roomId)
+      );
+      toast.success(isWishlisted ? "Saved to My Listings!" : "Removed from My Listings");
+    } catch (err) {
+      toast.error("Please login to save rooms");
     }
   };
 
@@ -137,8 +187,7 @@ export default function Rooms() {
                     placeholder="Search rooms..."
                     className="w-full border border-navy/20 dark:border-gold/20 rounded-lg px-3 py-2
                       text-sm outline-none bg-cream dark:bg-navy-dark
-                      text-navy dark:text-cream
-                      focus:border-gold transition"
+                      text-navy dark:text-cream focus:border-gold transition"
                   />
                 </div>
 
@@ -186,7 +235,14 @@ export default function Rooms() {
                     {rooms.length} room{rooms.length !== 1 ? "s" : ""} found
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {rooms.map((room) => <RoomCard key={room._id} room={room} />)}
+                    {rooms.map((room) => (
+                      <RoomCard
+                        key={room._id}
+                        room={room}
+                        wishlist={wishlist}
+                        onToggleWishlist={handleToggleWishlist}
+                      />
+                    ))}
                   </div>
                 </>
               )}

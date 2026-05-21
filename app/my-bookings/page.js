@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -52,12 +53,23 @@ export default function MyBookings() {
         <Navbar />
         <main className="flex-1 py-10 px-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-display text-2xl font-bold text-navy dark:text-cream mb-2">
-              My Bookings
-            </h1>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-              Manage your study room reservations
-            </p>
+
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="font-display text-2xl font-bold text-navy dark:text-cream">
+                  My Bookings
+                </h1>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                  Manage your study room reservations
+                </p>
+              </div>
+              {/* Button to My Listings */}
+              <Link href="/my-listings"
+                className="bg-navy text-gold border border-gold px-4 py-2 rounded-xl
+                  text-sm font-semibold hover:bg-gold hover:text-navy transition">
+                My Listings
+              </Link>
+            </div>
 
             {loading ? <Spinner /> : bookings.length === 0 ? (
               <div className="text-center py-20 bg-white dark:bg-navy/30 rounded-2xl
@@ -66,9 +78,14 @@ export default function MyBookings() {
                 <h3 className="text-lg font-semibold text-navy dark:text-cream mb-2">
                   You have no bookings yet
                 </h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  Browse rooms and book your perfect study space
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+                  Browse available rooms and book your perfect study space
                 </p>
+                <Link href="/rooms"
+                  className="bg-navy text-gold border border-gold px-6 py-2.5 rounded-xl
+                    text-sm font-semibold hover:bg-gold hover:text-navy transition">
+                  Browse Rooms
+                </Link>
               </div>
             ) : (
               <div className="space-y-4">
@@ -131,6 +148,16 @@ export default function MyBookings() {
                     </div>
                   </div>
                 ))}
+
+                {/* Bottom link to browse more rooms */}
+                <div className="text-center pt-4">
+                  <Link href="/rooms"
+                    className="inline-block border border-gold text-navy dark:text-gold
+                      px-6 py-2.5 rounded-xl text-sm font-semibold
+                      hover:bg-gold hover:text-navy transition">
+                    Browse More Rooms
+                  </Link>
+                </div>
               </div>
             )}
           </div>

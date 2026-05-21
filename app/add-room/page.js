@@ -152,7 +152,7 @@ export default function AddRoom() {
         capacity: Number(data.capacity),
         hourlyRate: Number(data.hourlyRate),
       });
-      toast.success("Room added successfully!");
+      toast.success("Room added to library successfully!");
       router.push("/my-listings");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to add room");
@@ -166,10 +166,10 @@ export default function AddRoom() {
         <main className="flex-1 py-10 px-6">
           <div className="max-w-2xl mx-auto">
             <h1 className="font-display text-2xl font-bold text-navy dark:text-cream mb-1">
-              Add a Study Room
+              Add a Study Room to the Library {/* ← updated heading */}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
-              Choose a preset room or fill in custom details
+              Register a new study room so students can discover and book it
             </p>
 
             <div className="bg-white dark:bg-navy/30 rounded-2xl border border-navy/8 dark:border-gold/15 p-6 shadow-sm">
@@ -213,11 +213,8 @@ export default function AddRoom() {
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-                {/* Room Name */}
                 <div>
-                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                    Room Name
-                  </label>
+                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Room Name</label>
                   <input
                     type="text"
                     {...register("name", { required: "Room name is required" })}
@@ -227,25 +224,19 @@ export default function AddRoom() {
                   {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
                 </div>
 
-                {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                    Description
-                  </label>
+                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Description</label>
                   <textarea
                     {...register("description", { required: "Description is required" })}
                     rows={3}
                     className="w-full border border-navy/20 dark:border-gold/20 rounded-xl px-4 py-2.5 text-sm outline-none bg-cream dark:bg-navy-dark text-navy dark:text-cream focus:border-gold transition resize-none"
-                    placeholder="Describe your study room..."
+                    placeholder="Describe the study room..."
                   />
                   {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
                 </div>
 
-                {/* Image URL */}
                 <div>
-                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                    Image URL
-                  </label>
+                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Image URL</label>
                   <input
                     type="text"
                     {...register("image", { required: "Image URL is required" })}
@@ -255,12 +246,9 @@ export default function AddRoom() {
                   {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image.message}</p>}
                 </div>
 
-                {/* Floor & Capacity */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                      Floor
-                    </label>
+                    <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Floor</label>
                     <input
                       type="text"
                       {...register("floor", { required: "Floor is required" })}
@@ -270,9 +258,7 @@ export default function AddRoom() {
                     {errors.floor && <p className="text-red-500 text-xs mt-1">{errors.floor.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                      Capacity
-                    </label>
+                    <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Capacity</label>
                     <input
                       type="number"
                       {...register("capacity", { required: "Capacity is required", min: { value: 1, message: "Min 1" } })}
@@ -283,11 +269,8 @@ export default function AddRoom() {
                   </div>
                 </div>
 
-                {/* Hourly Rate */}
                 <div>
-                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
-                    Hourly Rate ($)
-                  </label>
+                  <label className="block text-sm font-medium text-navy dark:text-cream mb-1">Hourly Rate ($)</label>
                   <input
                     type="number"
                     {...register("hourlyRate", { required: "Hourly rate is required", min: { value: 1, message: "Min $1" } })}
@@ -297,11 +280,8 @@ export default function AddRoom() {
                   {errors.hourlyRate && <p className="text-red-500 text-xs mt-1">{errors.hourlyRate.message}</p>}
                 </div>
 
-                {/* Amenities */}
                 <div>
-                  <label className="block text-sm font-medium text-navy dark:text-cream mb-2">
-                    Amenities
-                  </label>
+                  <label className="block text-sm font-medium text-navy dark:text-cream mb-2">Amenities</label>
                   <div className="grid grid-cols-2 gap-2">
                     {AMENITIES.map((amenity) => (
                       <label key={amenity} className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-navy/5 dark:hover:bg-gold/5 transition">
@@ -320,9 +300,16 @@ export default function AddRoom() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-navy text-gold border border-gold py-3 rounded-xl font-semibold hover:bg-gold hover:text-navy transition disabled:opacity-50"
+                  className="w-full bg-navy text-gold border border-gold py-3 rounded-xl
+                    font-semibold hover:bg-gold hover:text-navy transition disabled:opacity-50
+                    flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ? "Adding Room..." : "Add Room"}
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      Adding Room...
+                    </>
+                  ) : "Add Room to Library"}
                 </button>
               </form>
             </div>

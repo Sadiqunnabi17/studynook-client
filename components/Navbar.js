@@ -89,23 +89,20 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
-  // Only Home and Rooms show in center nav (always visible on md+)
+  // Only Home and Rooms always visible in center
   const centerLinks = [
     { label: "Home", href: "/" },
     { label: "Rooms", href: "/rooms" },
   ];
 
-  // These go under hamburger on small screens
-  const hamburgerLinks = [
-    ...(user ? [
-      { label: "Add Room", href: "/add-room" },
-      { label: "My Listings", href: "/my-listings" },
-      { label: "My Bookings", href: "/my-bookings" },
-      { label: "My Profile", href: "/profile" },
-    ] : [
-      { label: "Login", href: "/login" },
-      { label: "Register", href: "/register" },
-    ]),
+  // Hamburger links for small screens
+  const hamburgerLinks = user ? [
+    { label: "My Listings", href: "/my-listings" },
+    { label: "My Bookings", href: "/my-bookings" },
+    { label: "My Profile", href: "/profile" },
+  ] : [
+    { label: "Login", href: "/login" },
+    { label: "Register", href: "/register" },
   ];
 
   return (
@@ -121,7 +118,7 @@ export default function Navbar() {
           <Logo />
         </div>
 
-        {/* CENTER — Home & Rooms always visible on md+ */}
+        {/* CENTER — Home & Rooms only on md+ */}
         <nav className="hidden md:flex items-center gap-8">
           {centerLinks.map(({ label, href }) => (
             <Link
@@ -134,33 +131,19 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          {/* Extra links on md+ when logged in */}
-          {user && (
-            <>
-              <Link href="/add-room"
-                className="text-sm font-medium transition-colors duration-200
-                  text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold">
-                Add Room
-              </Link>
-              <Link href="/my-listings"
-                className="text-sm font-medium transition-colors duration-200
-                  text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold">
-                My Listings
-              </Link>
-            </>
-          )}
         </nav>
 
         {/* RIGHT — Auth + Theme + Hamburger */}
         <div className="flex-1 flex items-center justify-end gap-3">
 
-          {/* Home & Rooms visible on small screens too */}
+          {/* Home & Rooms visible on small screens */}
           <div className="flex md:hidden items-center gap-4">
             {centerLinks.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
-                className="text-sm font-medium text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold transition-colors"
+                className="text-sm font-medium text-navy dark:text-cream/85
+                  hover:text-gold dark:hover:text-gold transition-colors"
               >
                 {label}
               </Link>
@@ -169,7 +152,7 @@ export default function Navbar() {
 
           {user ? (
             <>
-              {/* User dropdown — hidden on small, visible md+ */}
+              {/* User dropdown — md+ only */}
               <div ref={dropdownRef} className="relative hidden md:block">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -202,16 +185,15 @@ export default function Navbar() {
 
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-52 rounded-2xl shadow-xl border overflow-hidden z-50
-                    bg-white dark:bg-navy-dark
-                    border-navy/10 dark:border-gold/20">
+                    bg-white dark:bg-navy-dark border-navy/10 dark:border-gold/20">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-white/8">
                       <p className="text-sm font-semibold text-navy dark:text-cream">{user.name}</p>
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
                     {[
-                      { label: "My Profile", href: "/profile" },
                       { label: "My Listings", href: "/my-listings" },
                       { label: "My Bookings", href: "/my-bookings" },
+                      { label: "My Profile", href: "/profile" },
                     ].map(({ label, href }) => (
                       <Link
                         key={label}
@@ -227,8 +209,7 @@ export default function Navbar() {
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2.5 text-sm text-red-500
-                        transition-colors border-t
-                        border-gray-100 dark:border-white/8
+                        transition-colors border-t border-gray-100 dark:border-white/8
                         hover:bg-red-50 dark:hover:bg-red-500/10"
                     >
                       Logout
@@ -242,14 +223,12 @@ export default function Navbar() {
             <>
               <Link href="/login"
                 className="hidden md:block text-sm font-medium px-4 py-2 rounded-lg transition-colors
-                  text-navy dark:text-cream/85
-                  hover:text-gold dark:hover:text-gold">
+                  text-navy dark:text-cream/85 hover:text-gold dark:hover:text-gold">
                 Login
               </Link>
               <Link href="/register"
                 className="hidden md:block text-sm font-semibold px-4 py-2 rounded-lg transition-all
-                  bg-navy text-gold border border-gold
-                  hover:bg-gold hover:text-navy">
+                  bg-navy text-gold border border-gold hover:bg-gold hover:text-navy">
                 Register
               </Link>
               <ThemeToggle />
@@ -328,7 +307,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </header>

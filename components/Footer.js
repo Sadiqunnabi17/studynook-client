@@ -62,7 +62,7 @@ export default function Footer() {
               {[
                 { label: "Home", href: "/" },
                 { label: "All Rooms", href: "/rooms" },
-                { label: "Add Room", href: "/add-room" },
+                { label: "My Listings", href: "/my-listings" },
                 { label: "My Bookings", href: "/my-bookings" },
                 { label: "My Profile", href: "/profile" }, // ← added
               ].map(({ label, href }) => (
