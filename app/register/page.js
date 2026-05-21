@@ -58,7 +58,7 @@ export default function Register() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/users/auth/google";
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/auth/google`;
   };
 
   const inputClass = `w-full border border-gray-300 dark:border-gold/20 rounded-xl px-4 py-2.5

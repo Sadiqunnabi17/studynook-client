@@ -40,7 +40,9 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/users/auth/google";
+    window.location.href = process.env.NODE_ENV === "production"
+    ? "https://studynook-server-yxr0.onrender.com/api/users/auth/google"
+    : "http://localhost:5000/api/users/auth/google";
   };
 
   return (

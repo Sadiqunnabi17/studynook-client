@@ -19,7 +19,7 @@ export default function NotFound() {
             Page Not Found
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-8 max-w-sm mx-auto">
-            The page you are looking for does not exist or has been moved.
+            The page you are looking for does not exist or has been moved. Head back to browse our available study rooms.
           </p>
           <Link href="/"
             className="inline-flex items-center gap-2 bg-navy text-gold border border-gold

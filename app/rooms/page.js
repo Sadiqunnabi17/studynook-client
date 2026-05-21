@@ -175,7 +175,7 @@ export default function Rooms() {
           <h1 className="font-display text-3xl md:text-4xl font-bold text-white">
             Available Study Rooms
           </h1>
-          <p className="text-white/60 mt-2">Find and book the perfect study space for you</p>
+          <p className="text-white/60 mt-2">Browse all 20 university library study rooms. Filter by amenities and book your perfect space instantly.</p>
         </div>
       </div>
 

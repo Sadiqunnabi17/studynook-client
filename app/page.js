@@ -106,7 +106,7 @@ export default function Home() {
             </h1>
 
             <p className="text-white/70 text-lg leading-relaxed mb-8 max-w-lg font-light">
-              Access dedicated study rooms, collaborative spaces, and private reading areas across our university library — designed for students and faculty alike.
+              Access 20 dedicated study rooms, collaborative spaces, and private reading areas across our university library — designed for students and faculty alike. Book instantly with real-time conflict detection.
             </p>
 
             {/* CTA buttons — visible on all screens */}
@@ -115,7 +115,7 @@ export default function Home() {
                 className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-7 py-3 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
                 Explore Rooms
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
               <Link href="/register"
@@ -185,7 +185,7 @@ export default function Home() {
               className="hidden md:inline-flex items-center gap-2 text-gold border border-gold px-5 py-2 rounded-lg text-sm font-semibold no-underline hover:bg-gold hover:text-navy transition-all">
               All Available Rooms
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
           </div>
@@ -288,7 +288,7 @@ export default function Home() {
               className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-8 py-3.5 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">
               Browse All Rooms
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
             <Link href="/register"

@@ -84,7 +84,7 @@ export default function MyBookings() {
                   You have no bookings yet
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-                  Browse available rooms and book your perfect study space
+                  You have not made any reservations yet. Browse our 20 available study rooms and book your perfect space today.
                 </p>
                 <Link href="/rooms"
                   className="bg-navy text-gold border border-gold px-6 py-2.5 rounded-xl
