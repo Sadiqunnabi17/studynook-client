@@ -28,10 +28,10 @@ export default function RoomDetails() {
   });
   const [bookingLoading, setBookingLoading] = useState(false);
 
-  useEffect(() => {
-    fetchRoom();
-    if (user) fetchWishlistStatus();
-  }, [id, user]);
+  // useEffect(() => {
+  //   fetchRoom();
+  //   if (user) fetchWishlistStatus();
+  // }, [id, user]);
 
   const fetchRoom = async () => {
     try {
@@ -45,6 +45,11 @@ export default function RoomDetails() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchRoom();
+    if (user) fetchWishlistStatus();
+  }, [id, user]);
 
   const fetchWishlistStatus = async () => {
     try {

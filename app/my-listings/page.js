@@ -13,10 +13,10 @@ export default function MyListings() {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    document.title = "StudyNook – My Listings";
-    fetchWishlist();
-  }, []);
+  // useEffect(() => {
+  //   document.title = "StudyNook – My Listings";
+  //   fetchWishlist();
+  // }, []);
 
   const fetchWishlist = async () => {
     try {
@@ -29,6 +29,12 @@ export default function MyListings() {
     }
   };
 
+  useEffect(() => {
+    document.title = "StudyNook – My Listings";
+    fetchWishlist();
+  }, []);
+  
+  
   const handleRemove = async (roomId) => {
     try {
       await api.patch(`/users/wishlist/${roomId}`);

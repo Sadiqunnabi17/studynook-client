@@ -14,10 +14,10 @@ export default function MyBookings() {
   const [loading, setLoading] = useState(true);
   const [cancelModal, setCancelModal] = useState(null);
 
-  useEffect(() => {
-    document.title = "StudyNook – My Bookings";
-    fetchBookings();
-  }, []);
+  // useEffect(() => {
+  //   document.title = "StudyNook – My Bookings";
+  //   fetchBookings();
+  // }, []);
 
   const fetchBookings = async () => {
     try {
@@ -29,6 +29,11 @@ export default function MyBookings() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    document.title = "StudyNook – My Bookings";
+    fetchBookings();
+  }, []);
 
   const handleCancel = async (id) => {
     try {

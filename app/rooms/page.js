@@ -95,17 +95,17 @@ export default function Rooms() {
   const [search, setSearch] = useState("");
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
-  useEffect(() => {
-    document.title = "StudyNook – Available Rooms";
-  }, []);
+  // useEffect(() => {
+  //   document.title = "StudyNook – Available Rooms";
+  // }, []);
 
-  useEffect(() => {
-    fetchRooms();
-  }, [search, selectedAmenities]);
+  // useEffect(() => {
+  //   fetchRooms();
+  // }, [search, selectedAmenities]);
 
-  useEffect(() => {
-    if (user) fetchWishlist();
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) fetchWishlist();
+  // }, [user]);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -130,6 +130,18 @@ export default function Rooms() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    document.title = "StudyNook – Available Rooms";
+  }, []);
+
+  useEffect(() => {
+    fetchRooms();
+  }, [search, selectedAmenities]);
+
+  useEffect(() => {
+    if (user) fetchWishlist();
+  }, [user]);
 
   const handleToggleWishlist = async (roomId) => {
     try {

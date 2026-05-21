@@ -30,10 +30,10 @@ export default function EditRoom() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  useEffect(() => {
-    document.title = "StudyNook – Edit Room";
-    fetchRoom();
-  }, [id]);
+  // useEffect(() => {
+  //   document.title = "StudyNook – Edit Room";
+  //   fetchRoom();
+  // }, [id]);
 
   const fetchRoom = async () => {
     try {
@@ -53,6 +53,11 @@ export default function EditRoom() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    document.title = "StudyNook – Edit Room";
+    fetchRoom();
+  }, [id]);
 
   const toggleAmenity = (amenity) => {
     setSelectedAmenities((prev) =>
