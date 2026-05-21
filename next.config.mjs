@@ -1,14 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  experimental: {
-    reactCompiler: false,
-  },
+  reactCompiler: false,
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },

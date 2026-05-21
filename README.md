@@ -1,6 +1,6 @@
 # StudyNook – Library Study Room Booking
 
-🌐 **Live Site:** [https://your-live-url.vercel.app](https://your-live-url.vercel.app)
+🌐 **Live Site:** [https://studynook-client-weld.vercel.app](https://studynook-client-weld.vercel.app)
 
 ## About
 
