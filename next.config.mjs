@@ -11,7 +11,9 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://studynook-server-yxr0.onrender.com/api/:path*",
+        destination: process.env.NODE_ENV === "production"
+          ? "https://studynook-server-yxr0.onrender.com/api/:path*"
+          : "http://localhost:5000/api/:path*",
       },
     ];
   },
