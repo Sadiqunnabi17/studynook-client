@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import Footer from "@/components/Footer";
 import Spinner from "@/components/Spinner";
 import api from "@/api/axios";
 import { useTheme } from "@/context/ThemeContext";
+
 
 function RoomCard({ room }) {
   const { theme } = useTheme();
@@ -70,6 +72,7 @@ export default function Home() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
+  const { user } = useAuth();
   const isDark = theme === "dark";
 
   useEffect(() => {
@@ -96,7 +99,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 bg-gold/15 border border-gold/30 rounded-full px-4 py-1.5 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
               <span className="text-gold text-xs font-medium tracking-widest uppercase">
-                Central University Library
+                Library Management System
               </span>
             </div>
 
@@ -118,10 +121,12 @@ export default function Home() {
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
-              <Link href="/register"
-                className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-7 py-3 rounded-xl no-underline transition-all hover:border-white/70 hover:bg-white/8">
-                Get Started Free
-              </Link>
+              {!user && (
+                <Link href="/register"
+                  className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-7 py-3 rounded-xl no-underline transition-all hover:border-white/70 hover:bg-white/8">
+                  Get Started Free
+                </Link>
+              )}
             </div>
 
             {/* Stats — updated to match actual app */}
@@ -291,10 +296,12 @@ export default function Home() {
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
-            <Link href="/register"
-              className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-8 py-3.5 rounded-xl no-underline transition-all hover:border-gold hover:text-gold">
-              Create Free Account
-            </Link>
+            {!user && (
+              <Link href="/register"
+                className="inline-flex items-center justify-center gap-2 text-white border border-white/30 font-medium px-8 py-3.5 rounded-xl no-underline transition-all hover:border-gold hover:text-gold">
+                Create Free Account
+              </Link>
+            )}
           </div>
         </div>
       </section>

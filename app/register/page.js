@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import api from "@/api/axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -40,6 +40,7 @@ const ACADEMIC_LEVELS = [
 export default function Register() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     document.title = "StudyNook – Register";
@@ -66,6 +67,22 @@ export default function Register() {
     text-navy dark:text-cream focus:border-gold transition`;
 
   const labelClass = "block text-sm font-medium text-navy dark:text-cream mb-1";
+
+  const focusNext = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const form = e.target.form;
+      const inputs = Array.from(form.elements).filter(
+        (el) => el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA"
+      );
+      const index = inputs.indexOf(e.target);
+      if (index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      } else {
+        handleSubmit(onSubmit)();
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-cream dark:bg-navy-dark transition-colors duration-300">
@@ -104,6 +121,7 @@ export default function Register() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
+            {/* Full Name */}
             <div>
               <label className={labelClass}>Full Name</label>
               <input
@@ -111,10 +129,12 @@ export default function Register() {
                 {...register("name", { required: "Name is required" })}
                 className={inputClass}
                 placeholder="John Doe"
+                onKeyDown={focusNext}
               />
               {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
             </div>
 
+            {/* Student ID */}
             <div>
               <label className={labelClass}>Student ID</label>
               <input
@@ -122,15 +142,18 @@ export default function Register() {
                 {...register("studentId", { required: "Student ID is required" })}
                 className={inputClass}
                 placeholder="e.g. 2021-1-60-001"
+                onKeyDown={focusNext}
               />
               {errors.studentId && <p className="text-red-500 text-xs mt-1">{errors.studentId.message}</p>}
             </div>
 
+            {/* Department */}
             <div>
               <label className={labelClass}>Department</label>
               <select
                 {...register("department", { required: "Department is required" })}
                 className={inputClass}
+                onKeyDown={focusNext}
               >
                 <option value="">-- Select Department --</option>
                 {DEPARTMENTS.map((dept) => (
@@ -140,11 +163,13 @@ export default function Register() {
               {errors.department && <p className="text-red-500 text-xs mt-1">{errors.department.message}</p>}
             </div>
 
+            {/* Academic Level */}
             <div>
               <label className={labelClass}>Academic Level</label>
               <select
                 {...register("academicLevel", { required: "Academic level is required" })}
                 className={inputClass}
+                onKeyDown={focusNext}
               >
                 <option value="">-- Select Academic Level --</option>
                 {ACADEMIC_LEVELS.map((level) => (
@@ -154,18 +179,20 @@ export default function Register() {
               {errors.academicLevel && <p className="text-red-500 text-xs mt-1">{errors.academicLevel.message}</p>}
             </div>
 
+            {/* Photo URL */}
             <div>
-              <label className={labelClass}>
-                Photo URL <span className="text-gray-400 font-normal"></span>
-              </label>
+              <label className={labelClass}>Photo URL</label>
               <input
                 type="text"
                 {...register("image", { required: "Photo URL is required" })}
                 className={inputClass}
                 placeholder="https://example.com/photo.jpg"
+                onKeyDown={focusNext}
               />
+              {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image.message}</p>}
             </div>
 
+            {/* Email */}
             <div>
               <label className={labelClass}>Email</label>
               <input
@@ -173,25 +200,50 @@ export default function Register() {
                 {...register("email", { required: "Email is required" })}
                 className={inputClass}
                 placeholder="you@example.com"
+                onKeyDown={focusNext}
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
             </div>
 
+            {/* Password */}
             <div>
               <label className={labelClass}>Password</label>
-              <input
-                type="password"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: { value: 6, message: "At least 6 characters" },
-                  validate: {
-                    hasUppercase: (v) => /[A-Z]/.test(v) || "Must have at least one uppercase letter",
-                    hasLowercase: (v) => /[a-z]/.test(v) || "Must have at least one lowercase letter",
-                  },
-                })}
-                className={inputClass}
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: { value: 6, message: "At least 6 characters" },
+                    validate: {
+                      hasUppercase: (v) => /[A-Z]/.test(v) || "Must have at least one uppercase letter",
+                      hasLowercase: (v) => /[a-z]/.test(v) || "Must have at least one lowercase letter",
+                    },
+                  })}
+                  className={`${inputClass} pr-10`}
+                  placeholder="••••••••"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSubmit(onSubmit)();
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition"
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                 Min 6 chars, one uppercase, one lowercase

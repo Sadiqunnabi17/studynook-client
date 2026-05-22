@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import api from "@/api/axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,6 +19,7 @@ export default function Login() {
 
   const router = useRouter();
   const { setUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     document.title = "StudyNook – Login";
@@ -41,7 +42,6 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/auth/google`;
-  
   };
 
   return (
@@ -52,7 +52,6 @@ export default function Login() {
         <div className="bg-white dark:bg-navy/40 rounded-2xl shadow-sm
           border border-gray-200 dark:border-gold/15 p-8 w-full max-w-md">
 
-          {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-navy dark:text-cream">Welcome back</h2>
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
@@ -82,8 +81,9 @@ export default function Login() {
             <div className="flex-1 h-px bg-gray-200 dark:bg-white/10" />
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
                 Email
@@ -92,6 +92,12 @@ export default function Login() {
                 type="email"
                 {...register("email", { required: "Email is required" })}
                 placeholder="you@example.com"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    document.querySelector('input[name="password"]').focus();
+                  }
+                }}
                 className="w-full border border-gray-300 dark:border-gold/20 rounded-xl px-4 py-2.5
                   text-sm outline-none bg-white dark:bg-navy-dark
                   text-navy dark:text-cream focus:border-gold transition"
@@ -99,18 +105,44 @@ export default function Login() {
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
             </div>
 
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-navy dark:text-cream mb-1">
                 Password
               </label>
-              <input
-                type="password"
-                {...register("password", { required: "Password is required" })}
-                placeholder="••••••••"
-                className="w-full border border-gray-300 dark:border-gold/20 rounded-xl px-4 py-2.5
-                  text-sm outline-none bg-white dark:bg-navy-dark
-                  text-navy dark:text-cream focus:border-gold transition"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", { required: "Password is required" })}
+                  placeholder="••••••••"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit(onSubmit)();
+                    }
+                  }}
+                  className="w-full border border-gray-300 dark:border-gold/20 rounded-xl px-4 py-2.5
+                    pr-10 text-sm outline-none bg-white dark:bg-navy-dark
+                    text-navy dark:text-cream focus:border-gold transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition"
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
 

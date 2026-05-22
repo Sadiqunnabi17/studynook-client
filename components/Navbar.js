@@ -35,9 +35,8 @@ function ThemeToggle() {
     <button
       onClick={toggleTheme}
       title="Toggle theme"
-      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all
-        bg-navy/8 dark:bg-gold/10 text-navy dark:text-gold
-        hover:bg-navy/15 dark:hover:bg-gold/20"
+      className="w-8 h-8 flex items-center justify-center transition-all
+        text-navy dark:text-gold hover:text-gold dark:hover:text-gold"
     >
       {isDark ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -89,13 +88,11 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
-  // Only Home and Rooms always visible in center
   const centerLinks = [
     { label: "Home", href: "/" },
     { label: "Rooms", href: "/rooms" },
   ];
 
-  // Hamburger links for small screens
   const hamburgerLinks = user ? [
     { label: "Add Room", href: "/add-room" },
     { label: "My Listings", href: "/my-listings" },
@@ -112,15 +109,15 @@ export default function Navbar() {
       border-navy/10 dark:border-gold/10
       ${scrolled ? "shadow-md" : ""}`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 h-16 grid grid-cols-3 items-center">
 
         {/* LEFT — Logo */}
-        <div className="flex-1">
+        <div className="flex items-center">
           <Logo />
         </div>
 
-        {/* CENTER — Home & Rooms only on md+ */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* CENTER — truly centered on all screens */}
+        <nav className="flex items-center justify-center gap-4 md:gap-8">
           {centerLinks.map(({ label, href }) => (
             <Link
               key={label}
@@ -134,27 +131,13 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* RIGHT — Auth + Theme + Hamburger */}
-        <div className="flex-1 flex items-center justify-end gap-3">
-
-          {/* Home & Rooms visible on small screens */}
-          <div className="flex md:hidden items-center gap-4">
-            {centerLinks.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="text-sm font-medium text-navy dark:text-cream/85
-                  hover:text-gold dark:hover:text-gold transition-colors"
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+        {/* RIGHT — Auth + Hamburger + Theme (theme always last/far right) */}
+        <div className="flex items-center justify-end gap-2">
 
           {user ? (
             <>
-              {/* User dropdown — md+ only */}
-              <div ref={dropdownRef} className="relative hidden md:block">
+              {/* User pic — visible on ALL screens */}
+              <div ref={dropdownRef} className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 px-2 py-1 rounded-full transition-colors
@@ -179,7 +162,7 @@ export default function Navbar() {
                   </span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2"
-                    className="text-navy dark:text-cream">
+                    className="hidden md:block text-navy dark:text-cream">
                     <path d="m6 9 6 6 6-6"/>
                   </svg>
                 </button>
@@ -219,7 +202,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              <ThemeToggle />
             </>
           ) : (
             <>
@@ -233,7 +215,6 @@ export default function Navbar() {
                   bg-navy text-gold border border-gold hover:bg-gold hover:text-navy">
                 Register
               </Link>
-              <ThemeToggle />
             </>
           )}
 
@@ -303,12 +284,13 @@ export default function Navbar() {
                     Logout
                   </button>
                 )}
-                <div className="px-4 py-3 border-t border-gray-100 dark:border-white/8">
-                  <ThemeToggle />
-                </div>
               </div>
             )}
           </div>
+
+          {/* Theme toggle — always far right on all screens */}
+          <ThemeToggle />
+
         </div>
       </div>
     </header>
