@@ -13,11 +13,6 @@ export default function MyListings() {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   document.title = "StudyNook – My Listings";
-  //   fetchWishlist();
-  // }, []);
-
   const fetchWishlist = async () => {
     try {
       const res = await api.get("/users/wishlist");

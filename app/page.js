@@ -129,7 +129,7 @@ export default function Home() {
               )}
             </div>
 
-            {/* Stats — updated to match actual app */}
+            {/* Stats */}
             <div className="flex gap-8 mt-10 pt-8 border-t border-white/10">
               {[
                 { num: "20", label: "Study Rooms" },
@@ -287,7 +287,7 @@ export default function Home() {
           <p className="text-white/65 text-base leading-relaxed mb-8">
             Join students and faculty who have already discovered the convenience of StudyNook — your university library booking system.
           </p>
-          {/* CTA buttons — both visible on all screens */}
+          {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/rooms"
               className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-bold px-8 py-3.5 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30">

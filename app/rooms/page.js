@@ -95,18 +95,6 @@ export default function Rooms() {
   const [search, setSearch] = useState("");
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
-  // useEffect(() => {
-  //   document.title = "StudyNook – Available Rooms";
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchRooms();
-  // }, [search, selectedAmenities]);
-
-  // useEffect(() => {
-  //   if (user) fetchWishlist();
-  // }, [user]);
-
   const fetchRooms = async () => {
     setLoading(true);
     try {

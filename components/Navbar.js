@@ -218,7 +218,7 @@ export default function Navbar() {
             </>
           )}
 
-          {/* Hamburger — small screens only */}
+          {/* Hamburger */}
           <div ref={menuRef} className="relative md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -288,7 +288,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Theme toggle — always far right on all screens */}
+          {/* Theme toggle */}
           <ThemeToggle />
 
         </div>
