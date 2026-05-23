@@ -136,7 +136,7 @@ export default function Home() {
                 { num: "8AM–10PM", label: "Open Hours" },
                 { num: "instant", label: "Booking" },
               ].map(({ num, label }) => (
-                <div key={label}>
+                <div key={label} className="text-center">
                   <div className="font-display text-xl font-bold text-gold">{num}</div>
                   <div className="text-xs text-white/50 mt-1">{label}</div>
                 </div>
